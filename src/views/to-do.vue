@@ -7,20 +7,29 @@ const text = ref('')
 const completed = ref(false)
 const sort = ref('default')
 
+// DESTRUCTURING METHODS FROM THE STORE
 const { addTodo, setAllTodos, deleteTodo } = toDoStore
 
+// GETTING TODOS FROM THE STORE
 const todos = computed(() => {
   return toDoStore.todos
 })
 
+// ===================================
+// FILTERING THE ARRAY WITH COMPLETED OR NOT
+// ==================================
 const filteredTodos = computed(() => {
   if (completed.value) {
+    // SHALLOW CLONE OF THE ARRAY
     return [...todos.value].filter((todo) => todo.done)
   } else {
     return [...todos.value]
   }
 })
 
+// ============================
+// SORTING  the filtered arrayy
+// ============================
 const sortedTodos = computed(() => {
   if (sort.value == 'z-a' || sort.value == 'a-z') {
     return [...filteredTodos.value].sort((a, b) => {
@@ -33,9 +42,11 @@ const sortedTodos = computed(() => {
   }
 })
 
+// GETTING TODOS FROM LOCAL STORAGE
 const allTodos = JSON.parse(localStorage.getItem('todos')) || []
 setAllTodos(allTodos)
 
+// ADD NEW TODO
 function addTodoHandler() {
   addTodo(text.value)
   text.value = ''
